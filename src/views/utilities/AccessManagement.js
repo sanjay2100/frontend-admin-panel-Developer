@@ -17,6 +17,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
+import { IconTrash } from '@tabler/icons';
 
 
 const AccessManagement = () => {
@@ -183,6 +184,20 @@ const AccessManagement = () => {
     return { group, product, create, edit, update, remove, approve, download };
   }
 
+
+  //delete data in the table
+
+  const deleteAddedData = (index) => {
+    //console.log(index);
+
+    const updatedPost = [...PostData.products.slice(0, index), ...PostData.products.slice(index + 1)];
+    const updatedTable = [...rows.slice(0, index), ...rows.slice(index + 1)];
+
+    setRows(updatedTable);
+    setPostData({ ...PostData, products: updatedPost });
+    //console.log(PostData);
+  };
+
   const [rows, setRows] = React.useState([]);
   // const rows = [
   //   createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
@@ -209,6 +224,7 @@ const AccessManagement = () => {
         Access.actions.delete === true ? 'true' : 'false',
         Access.actions.approve === true ? 'true' : 'false',
         Access.actions.download === true ? 'true' : 'false'
+
       )]);
       setData({ ...Data, fields: [...Data.access, FieldAccess] });
       setPostData({ ...PostData, products: [...PostData.products, Access] })
@@ -333,11 +349,11 @@ const AccessManagement = () => {
                   <TableCell align="left">Delete</TableCell>
                   <TableCell align="left">Approve</TableCell>
                   <TableCell align="left">Download</TableCell>
-
+                  <TableCell align="left"></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.map((row,index) => (
                   <TableRow key={row.product} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       {row.group}
@@ -349,7 +365,7 @@ const AccessManagement = () => {
                     <TableCell align="left">{row.remove}</TableCell>
                     <TableCell align="left">{row.approve}</TableCell>
                     <TableCell align="left">{row.download}</TableCell>
-
+                    <TableCell>{<IconTrash style={{color:'red'}} onClick={()=>deleteAddedData(index)}/>}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
